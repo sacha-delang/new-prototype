@@ -1,10 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import { DashboardShell } from "@/components/dashboard-shell"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { toast } from "sonner"
 import {
   LineChart,
   Line,
@@ -15,7 +17,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts"
-import { Monitor, CheckCircle, TrendingUp, Lightbulb, AlertTriangle, Info, ArrowUp } from "lucide-react"
+import { Monitor, CheckCircle, TrendingUp, Lightbulb, AlertTriangle, Info, ArrowUp, X } from "lucide-react"
 
 const spendingData = [
   { month: "Jan", withoutSavings: 100, withSavings: 120 },
@@ -32,71 +34,96 @@ const spendingData = [
   { month: "Dec", withoutSavings: 195, withSavings: 200 },
 ]
 
-const optimizationTips = [
+const initialTips = [
   {
-    icon: "zoom",
+    id: "1",
+    icon: "Z",
     iconBg: "bg-primary/10",
     iconColor: "text-primary",
     title: "Cancel unused Zoom licenses",
     description: "14 licenses have had no activity for 30+ days.",
     savings: "EST. SAVINGS: $280/mo",
     action: "Apply",
-    actionColor: "bg-primary text-primary-foreground",
   },
   {
-    icon: "slack",
+    id: "2",
+    icon: "S",
     iconBg: "bg-chart-2/10",
     iconColor: "text-chart-2",
     title: "Switch Slack to Annual",
     description: "Save 15% by moving to annual billing for 142 seats.",
     savings: "EST. SAVINGS: $240/yr",
     action: "Learn More",
-    actionColor: "bg-primary text-primary-foreground",
   },
   {
-    icon: "canva",
+    id: "3",
+    icon: "C",
     iconBg: "bg-destructive/10",
     iconColor: "text-destructive",
     title: "Consolidate Canva Seats",
     description: "Marketing & Design have separate team billing plans.",
     savings: "EST. SAVINGS: $45/mo",
     action: "Merge",
-    actionColor: "bg-primary text-primary-foreground",
   },
   {
-    icon: "hubspot",
+    id: "4",
+    icon: "H",
     iconBg: "bg-destructive/10",
     iconColor: "text-destructive",
     title: "Downgrade HubSpot Tier",
     description: "Sales Hub Enterprise features underutilized vs Professional.",
     savings: "EST. SAVINGS: $200/yr",
     action: "Review",
-    actionColor: "bg-primary text-primary-foreground",
   },
 ]
 
-const priorityAlerts = [
+const initialAlerts = [
   {
+    id: "1",
     icon: AlertTriangle,
     iconColor: "text-destructive",
     title: "Auto-renewal approaching",
     description: "Salesforce renewal in 4 days. Contact CSM for renegotiation.",
   },
   {
+    id: "2",
     icon: ArrowUp,
     iconColor: "text-warning",
     title: "Unused Seat Overflow",
     description: "Github Enterprise seats at 92% capacity. 8 seats remaining.",
   },
   {
+    id: "3",
     icon: Info,
     iconColor: "text-primary",
     title: "Price Hike Alert",
     description: "aigma announced 10% price increase for Business plan starting Dec 1st.",
   },
+  {
+    id: "4",
+    icon: AlertTriangle,
+    iconColor: "text-warning",
+    title: "Contract expiring",
+    description: "Datadog annual contract ends May 10. Review alternatives.",
+  },
 ]
 
 export default function InsightsPage() {
+  const [tips, setTips] = useState(initialTips)
+  const [alerts, setAlerts] = useState(initialAlerts)
+
+  const handleTipAction = (tip: typeof initialTips[0]) => {
+    setTips((prev) => prev.filter((t) => t.id !== tip.id))
+    toast.success(`${tip.action} action applied`, {
+      description: `${tip.title} - optimization in progress.`,
+    })
+  }
+
+  const dismissAlert = (id: string) => {
+    setAlerts((prev) => prev.filter((a) => a.id !== id))
+    toast("Alert dismissed")
+  }
+
   return (
     <DashboardShell>
       <div className="flex flex-col gap-6">
@@ -215,7 +242,7 @@ export default function InsightsPage() {
                     iconType="circle"
                     iconSize={8}
                     wrapperStyle={{ fontSize: 12, paddingBottom: 10, color: "var(--muted-foreground)" }}
-                    formatter={(value) => value === "withSavings" ? "Blue Line" : "Red Line"}
+                    formatter={(value) => value === "withSavings" ? "Current (With Savings)" : "Without Savings"}
                   />
                   <Line type="monotone" dataKey="withSavings" stroke="var(--chart-1)" strokeWidth={2} dot={{ r: 4, fill: "var(--chart-1)" }} />
                   <Line type="monotone" dataKey="withoutSavings" stroke="var(--chart-3)" strokeWidth={2} dot={{ r: 4, fill: "var(--chart-3)" }} />
@@ -229,16 +256,16 @@ export default function InsightsPage() {
           <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-foreground">Optimization Tips & Suggestions</h2>
-              <button className="text-sm font-medium text-primary hover:underline">View All Tips</button>
+              <span className="text-xs text-muted-foreground">{tips.length} active</span>
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {optimizationTips.map((tip, i) => (
-                <Card key={i} className="border-border bg-primary/5">
+              {tips.map((tip) => (
+                <Card key={tip.id} className="border-border bg-primary/5">
                   <CardContent className="p-5">
                     <div className="flex items-start gap-3">
                       <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${tip.iconBg}`}>
                         <span className={`text-xs font-bold ${tip.iconColor}`}>
-                          {tip.icon[0].toUpperCase()}
+                          {tip.icon}
                         </span>
                       </div>
                       <div className="flex-1">
@@ -248,29 +275,50 @@ export default function InsightsPage() {
                     </div>
                     <div className="mt-4 flex items-center justify-between">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{tip.savings}</p>
-                      <Button size="sm" className={`h-7 text-xs ${tip.actionColor}`}>
+                      <Button
+                        size="sm"
+                        className="h-7 text-xs"
+                        onClick={() => handleTipAction(tip)}
+                      >
                         {tip.action}
                       </Button>
                     </div>
                   </CardContent>
                 </Card>
               ))}
+              {tips.length === 0 && (
+                <div className="col-span-2 flex items-center justify-center py-12 text-sm text-muted-foreground rounded-lg border border-dashed border-border">
+                  All optimizations applied. Check back later for new suggestions.
+                </div>
+              )}
             </div>
           </div>
 
           <div className="flex flex-col gap-4">
             <h2 className="text-lg font-semibold text-foreground">Priority Alerts</h2>
-            {priorityAlerts.map((alert, i) => (
-              <Card key={i} className="border-border bg-card">
+            {alerts.map((alert) => (
+              <Card key={alert.id} className="border-border bg-card group">
                 <CardContent className="flex items-start gap-3 p-4">
                   <alert.icon className={`mt-0.5 h-4 w-4 shrink-0 ${alert.iconColor}`} />
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-foreground">{alert.title}</p>
                     <p className="mt-0.5 text-xs text-muted-foreground leading-relaxed">{alert.description}</p>
                   </div>
+                  <button
+                    onClick={() => dismissAlert(alert.id)}
+                    className="mt-0.5 shrink-0 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:text-foreground"
+                    aria-label={`Dismiss ${alert.title}`}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
                 </CardContent>
               </Card>
             ))}
+            {alerts.length === 0 && (
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground rounded-lg border border-dashed border-border">
+                No active alerts
+              </div>
+            )}
 
             <Card className="border-none bg-foreground text-card overflow-hidden">
               <CardContent className="p-5">

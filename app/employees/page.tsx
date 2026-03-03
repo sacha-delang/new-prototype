@@ -1,12 +1,33 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { DashboardShell } from "@/components/dashboard-shell"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { sentimentData, type SentimentEntry } from "@/lib/mock-data"
+import { toast } from "sonner"
 import {
   BarChart,
   Bar,
@@ -17,17 +38,29 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts"
-import { Star, Send, ArrowUpDown } from "lucide-react"
+import { Star, Send, ArrowUpDown, Search } from "lucide-react"
 
 export default function EmployeesPage() {
   const [sortBy, setSortBy] = useState<"name" | "rating">("rating")
   const [selectedSub, setSelectedSub] = useState<SentimentEntry | null>(null)
+  const [toolSearch, setToolSearch] = useState("")
+  const [surveyTool, setSurveyTool] = useState("")
+  const [surveyMessage, setSurveyMessage] = useState("")
+  const [surveyOpen, setSurveyOpen] = useState(false)
 
-  const sorted = [...sentimentData].sort((a, b) =>
-    sortBy === "rating" ? a.avgRating - b.avgRating : a.subscriptionName.localeCompare(b.subscriptionName)
-  )
+  const filteredData = useMemo(() => {
+    let data = [...sentimentData]
+    if (toolSearch) {
+      const q = toolSearch.toLowerCase()
+      data = data.filter((s) => s.subscriptionName.toLowerCase().includes(q))
+    }
+    data.sort((a, b) =>
+      sortBy === "rating" ? a.avgRating - b.avgRating : a.subscriptionName.localeCompare(b.subscriptionName)
+    )
+    return data
+  }, [sortBy, toolSearch])
 
-  const chartData = sorted.map((s) => ({
+  const chartData = filteredData.map((s) => ({
     name: s.subscriptionName,
     rating: s.avgRating,
     usage: s.usageRating,
@@ -39,6 +72,19 @@ export default function EmployeesPage() {
   const highestRated = [...sentimentData].sort((a, b) => b.avgRating - a.avgRating)[0]
   const totalResponses = sentimentData.reduce((sum, s) => sum + s.totalResponses, 0)
 
+  const handleSendSurvey = () => {
+    if (!surveyTool) {
+      toast.error("Please select a tool to survey about.")
+      return
+    }
+    toast.success("Survey sent successfully", {
+      description: `Employee satisfaction survey for ${surveyTool} has been distributed.`,
+    })
+    setSurveyTool("")
+    setSurveyMessage("")
+    setSurveyOpen(false)
+  }
+
   return (
     <DashboardShell>
       <div className="flex flex-col gap-6">
@@ -49,10 +95,63 @@ export default function EmployeesPage() {
               Employee satisfaction ratings for each subscription.
             </p>
           </div>
-          <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-            <Send className="mr-2 h-4 w-4" />
-            Send Survey
-          </Button>
+          <Dialog open={surveyOpen} onOpenChange={setSurveyOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Send className="mr-2 h-4 w-4" />
+                Send Survey
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="text-foreground">Send Employee Survey</DialogTitle>
+                <DialogDescription>
+                  Distribute a satisfaction survey to employees using a specific tool.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-4 py-4">
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="survey-tool" className="text-foreground">Tool to Survey</Label>
+                  <Select value={surveyTool} onValueChange={setSurveyTool}>
+                    <SelectTrigger className="bg-background text-foreground">
+                      <SelectValue placeholder="Select a tool..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sentimentData.map((s) => (
+                        <SelectItem key={s.subscriptionId} value={s.subscriptionName}>
+                          {s.subscriptionName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="survey-message" className="text-foreground">Custom Message (optional)</Label>
+                  <Textarea
+                    id="survey-message"
+                    placeholder="Add a note to employees about why this survey is being sent..."
+                    value={surveyMessage}
+                    onChange={(e) => setSurveyMessage(e.target.value)}
+                    className="bg-background text-foreground min-h-[80px]"
+                  />
+                </div>
+                <div className="rounded-md border border-border p-3 bg-secondary/30">
+                  <p className="text-xs text-muted-foreground">
+                    The survey will be sent to all employees who are assigned to the selected tool. Responses are anonymous and results will appear on this page within 48 hours.
+                  </p>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button onClick={handleSendSurvey}>
+                  <Send className="mr-2 h-4 w-4" />
+                  Send Survey
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
@@ -88,13 +187,23 @@ export default function EmployeesPage() {
           </Card>
         </div>
 
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Filter tools by name..."
+            value={toolSearch}
+            onChange={(e) => setToolSearch(e.target.value)}
+            className="h-9 pl-9 bg-card border-border text-foreground placeholder:text-muted-foreground"
+          />
+        </div>
+
         <Card className="border-border bg-card">
           <CardHeader className="pb-2">
             <CardTitle className="text-base font-medium text-foreground">
               Sentiment Scores by Tool
             </CardTitle>
             <p className="text-xs text-muted-foreground">
-              Average employee rating per subscription (ascending)
+              Average employee rating per subscription ({filteredData.length} tools shown)
             </p>
           </CardHeader>
           <CardContent>
@@ -167,8 +276,8 @@ export default function EmployeesPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col gap-2">
-                {sorted.map((entry) => (
+              <div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto pr-1">
+                {filteredData.map((entry) => (
                   <button
                     key={entry.subscriptionId}
                     onClick={() => setSelectedSub(entry)}
@@ -209,6 +318,9 @@ export default function EmployeesPage() {
                     </div>
                   </button>
                 ))}
+                {filteredData.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-8">No tools match your search.</p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -264,6 +376,18 @@ export default function EmployeesPage() {
                       </div>
                     ))}
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-fit mt-2"
+                    onClick={() => {
+                      setSurveyTool(selectedSub.subscriptionName)
+                      setSurveyOpen(true)
+                    }}
+                  >
+                    <Send className="mr-2 h-3.5 w-3.5" />
+                    Send Survey for {selectedSub.subscriptionName}
+                  </Button>
                 </div>
               ) : (
                 <div className="flex h-[300px] items-center justify-center text-sm text-muted-foreground">

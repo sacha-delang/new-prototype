@@ -8,7 +8,10 @@ import { RecentAlerts } from "@/components/overview/recent-alerts"
 import { TopSubscriptions } from "@/components/overview/top-subscriptions"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { toast } from "sonner"
+import { MessageSquare } from "lucide-react"
 import {
   Table,
   TableBody,
@@ -19,9 +22,12 @@ import {
 } from "@/components/ui/table"
 
 const activeServices = [
-  { name: "Slack", logo: "S", logoBg: "bg-primary", category: "Communication", cost: "$50.00", renewal: "Oct 12, 2023", status: "PRICE HIKE EXPECTED", statusColor: "text-destructive bg-destructive/10" },
-  { name: "OpenAI", logo: "O", logoBg: "bg-chart-3", category: "AI Services", cost: "$759.00", renewal: "Oct 28, 2023", status: "RENEWING SOON", statusColor: "text-primary bg-primary/10" },
-  { name: "AWS", logo: "A", logoBg: "bg-chart-5", category: "Infrastructure", cost: "$800.00", renewal: "Oct 30, 2023", status: "STABLE", statusColor: "text-foreground bg-secondary" },
+  { name: "Slack", logo: "S", logoBg: "bg-primary", category: "Communication", cost: "$675.00", renewal: "Mar 01, 2026", status: "PRICE HIKE EXPECTED", statusColor: "text-destructive bg-destructive/10" },
+  { name: "OpenAI", logo: "O", logoBg: "bg-chart-3", category: "AI Services", cost: "$820.00", renewal: "Monthly", status: "RENEWING SOON", statusColor: "text-primary bg-primary/10" },
+  { name: "AWS", logo: "A", logoBg: "bg-chart-5", category: "Infrastructure", cost: "$2,450.00", renewal: "Mar 15, 2026", status: "COST INCREASE", statusColor: "text-destructive bg-destructive/10" },
+  { name: "GitHub", logo: "G", logoBg: "bg-foreground", category: "Development", cost: "$525.00", renewal: "Jul 20, 2026", status: "STABLE", statusColor: "text-foreground bg-secondary" },
+  { name: "Anthropic", logo: "AN", logoBg: "bg-chart-5", category: "AI Services", cost: "$650.00", renewal: "Monthly", status: "STABLE", statusColor: "text-foreground bg-secondary" },
+  { name: "CrowdStrike", logo: "CS", logoBg: "bg-destructive", category: "Security", cost: "$560.00", renewal: "Aug 01, 2026", status: "STABLE", statusColor: "text-foreground bg-secondary" },
 ]
 
 export default function DashboardPage() {
@@ -52,13 +58,15 @@ export default function DashboardPage() {
           </div>
           <div className="flex flex-col gap-6">
             <CategoryBreakdown />
-            <Card className="border-border bg-card overflow-hidden">
-              <CardContent className="flex items-center justify-center p-8">
-                <p className="text-lg font-semibold text-primary text-center leading-relaxed">
-                  Request<br />personal consultation
-                </p>
-              </CardContent>
-            </Card>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-fit gap-2"
+              onClick={() => toast.info("Our team will reach out within 24 hours.", { description: "Consultation request submitted." })}
+            >
+              <MessageSquare className="h-4 w-4" />
+              Request personal consultation
+            </Button>
           </div>
         </div>
 

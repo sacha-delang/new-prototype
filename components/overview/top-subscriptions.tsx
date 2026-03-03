@@ -7,6 +7,8 @@ import { ArrowRight } from "lucide-react"
 const opportunities = [
   { current: "Calendly", alternative: "Cal.com", savings: "$12/mo" },
   { current: "Midjourney", alternative: "Stable Diffusion", savings: "$15/mo" },
+  { current: "Zoom Pro", alternative: "Google Meet (included)", savings: "$350/mo" },
+  { current: "New Relic", alternative: "Datadog (existing)", savings: "$310/mo" },
 ]
 
 export function TopSubscriptions() {
@@ -28,7 +30,7 @@ export function TopSubscriptions() {
           {opportunities.map((opp, i) => (
             <div
               key={i}
-              className="flex items-center justify-between rounded-lg border border-border p-4"
+              className="flex items-center justify-between rounded-lg border border-border p-4 transition-colors hover:bg-secondary/30"
             >
               <div className="flex items-center gap-4">
                 <div>
