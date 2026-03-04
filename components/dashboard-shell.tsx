@@ -1,7 +1,7 @@
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
-import { Search, Bell, Sun, Moon, CreditCard, TrendingUp, Users, LayoutDashboard, Settings, AlertTriangle, X } from "lucide-react"
+import { Search, Bell, Sun, Moon, CreditCard, TrendingUp, Users, LayoutDashboard, Settings, AlertTriangle, X, Store } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
@@ -198,6 +198,10 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             <CommandItem onSelect={() => runCommand(() => router.push("/subscriptions"))}>
               <CreditCard className="mr-2 h-4 w-4" />
               Subscriptions
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => router.push("/marketplace"))}>
+              <Store className="mr-2 h-4 w-4" />
+              Marketplace
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => router.push("/insights"))}>
               <TrendingUp className="mr-2 h-4 w-4" />

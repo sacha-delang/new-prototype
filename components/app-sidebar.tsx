@@ -8,12 +8,14 @@ import {
   TrendingUp,
   Users,
   Settings,
+  Store,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
   { label: "Subscriptions", href: "/subscriptions", icon: CreditCard },
+  { label: "Marketplace", href: "/marketplace", icon: Store },
   { label: "Insights", href: "/insights", icon: TrendingUp },
   { label: "Employees", href: "/employees", icon: Users },
 ]
