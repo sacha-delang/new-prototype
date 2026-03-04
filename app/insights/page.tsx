@@ -20,18 +20,18 @@ import {
 import { Monitor, CheckCircle, TrendingUp, Lightbulb, AlertTriangle, Info, ArrowUp, X } from "lucide-react"
 
 const spendingData = [
-  { month: "Jan", withoutSavings: 100, withSavings: 120 },
-  { month: "Feb", withoutSavings: 98, withSavings: 130 },
-  { month: "Mar", withoutSavings: 115, withSavings: 140 },
-  { month: "Apr", withoutSavings: 120, withSavings: 148 },
-  { month: "May", withoutSavings: 140, withSavings: 155 },
-  { month: "Jun", withoutSavings: 145, withSavings: 160 },
-  { month: "Jul", withoutSavings: 150, withSavings: 168 },
-  { month: "Aug", withoutSavings: 160, withSavings: 175 },
-  { month: "Sep", withoutSavings: 170, withSavings: 180 },
-  { month: "Oct", withoutSavings: 180, withSavings: 188 },
-  { month: "Nov", withoutSavings: 200, withSavings: 195 },
-  { month: "Dec", withoutSavings: 195, withSavings: 200 },
+  { month: "Jan", withoutSavings: 120, withSavings: 118 },
+  { month: "Feb", withoutSavings: 128, withSavings: 124 },
+  { month: "Mar", withoutSavings: 138, withSavings: 130 },
+  { month: "Apr", withoutSavings: 149, withSavings: 137 },
+  { month: "May", withoutSavings: 157, withSavings: 142 },
+  { month: "Jun", withoutSavings: 163, withSavings: 146 },
+  { month: "Jul", withoutSavings: 172, withSavings: 151 },
+  { month: "Aug", withoutSavings: 180, withSavings: 155 },
+  { month: "Sep", withoutSavings: 190, withSavings: 160 },
+  { month: "Oct", withoutSavings: 198, withSavings: 162 },
+  { month: "Nov", withoutSavings: 210, withSavings: 168 },
+  { month: "Dec", withoutSavings: 220, withSavings: 172 },
 ]
 
 const initialTips = [
@@ -244,8 +244,8 @@ export default function InsightsPage() {
                     wrapperStyle={{ fontSize: 12, paddingBottom: 10, color: "var(--muted-foreground)" }}
                     formatter={(value) => value === "withSavings" ? "Current (With Savings)" : "Without Savings"}
                   />
-                  <Line type="monotone" dataKey="withSavings" stroke="var(--chart-1)" strokeWidth={2} dot={{ r: 4, fill: "var(--chart-1)" }} />
-                  <Line type="monotone" dataKey="withoutSavings" stroke="var(--chart-3)" strokeWidth={2} dot={{ r: 4, fill: "var(--chart-3)" }} />
+                  <Line type="monotone" dataKey="withoutSavings" stroke="var(--chart-3)" strokeWidth={2} dot={{ r: 4, fill: "var(--chart-3)" }} name="withoutSavings" />
+                  <Line type="monotone" dataKey="withSavings" stroke="var(--chart-1)" strokeWidth={2} dot={{ r: 4, fill: "var(--chart-1)" }} name="withSavings" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
