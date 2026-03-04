@@ -22,12 +22,12 @@ import {
 } from "@/components/ui/table"
 
 const activeServices = [
-  { name: "Slack", logo: "S", logoBg: "bg-primary", category: "Communication", cost: "$675.00", renewal: "Mar 01, 2026", status: "PRICE HIKE EXPECTED", statusColor: "text-destructive bg-destructive/10" },
-  { name: "OpenAI", logo: "O", logoBg: "bg-chart-3", category: "AI Services", cost: "$820.00", renewal: "Monthly", status: "RENEWING SOON", statusColor: "text-primary bg-primary/10" },
-  { name: "AWS", logo: "A", logoBg: "bg-chart-5", category: "Infrastructure", cost: "$2,450.00", renewal: "Mar 15, 2026", status: "COST INCREASE", statusColor: "text-destructive bg-destructive/10" },
-  { name: "GitHub", logo: "G", logoBg: "bg-foreground", category: "Development", cost: "$525.00", renewal: "Jul 20, 2026", status: "STABLE", statusColor: "text-foreground bg-secondary" },
-  { name: "Anthropic", logo: "AN", logoBg: "bg-chart-5", category: "AI Services", cost: "$650.00", renewal: "Monthly", status: "STABLE", statusColor: "text-foreground bg-secondary" },
-  { name: "CrowdStrike", logo: "CS", logoBg: "bg-destructive", category: "Security", cost: "$560.00", renewal: "Aug 01, 2026", status: "STABLE", statusColor: "text-foreground bg-secondary" },
+  { name: "Slack Enterprise", logo: "SL", logoBg: "bg-primary", category: "Collaboration", cost: "$450.00", renewal: "Oct 12, 2026", status: "PRICE HIKE EXPECTED", statusColor: "text-destructive bg-destructive/10" },
+  { name: "OpenAI API", logo: "OA", logoBg: "bg-foreground", category: "AI/ML", cost: "$820.00", renewal: "Monthly", status: "RENEWING SOON", statusColor: "text-primary bg-primary/10" },
+  { name: "AWS", logo: "AW", logoBg: "bg-chart-3", category: "Cloud IT", cost: "$2,450.00", renewal: "Mar 15, 2026", status: "COST INCREASE", statusColor: "text-destructive bg-destructive/10" },
+  { name: "Adobe Creative Cloud", logo: "AD", logoBg: "bg-destructive", category: "Creative", cost: "$2,890.00", renewal: "Jan 20, 2026", status: "STABLE", statusColor: "text-foreground bg-secondary" },
+  { name: "Salesforce CRM", logo: "SF", logoBg: "bg-primary", category: "Productivity", cost: "$1,650.00", renewal: "Mar 07, 2026", status: "RENEWING SOON", statusColor: "text-primary bg-primary/10" },
+  { name: "Snowflake", logo: "SF", logoBg: "bg-primary", category: "AI/ML", cost: "$1,100.00", renewal: "Aug 15, 2026", status: "STABLE", statusColor: "text-foreground bg-secondary" },
 ]
 
 export default function DashboardPage() {
@@ -37,7 +37,7 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">Subscriptions in Use</h1>
           <p className="text-sm text-muted-foreground">
-            {"Manage and track your organization's active SaaS portfolio."}
+{"Manage and track your organization\u2019s 24 active SaaS subscriptions totaling $17,535/mo."}
           </p>
         </div>
 

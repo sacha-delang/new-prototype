@@ -19,19 +19,20 @@ import {
 } from "recharts"
 import { Monitor, CheckCircle, TrendingUp, Lightbulb, AlertTriangle, Info, ArrowUp, X } from "lucide-react"
 
+// Monthly spending in thousands ($k) — based on 24 active subscriptions totaling ~$17.5k/mo
 const spendingData = [
-  { month: "Jan", withoutSavings: 120, withSavings: 118 },
-  { month: "Feb", withoutSavings: 128, withSavings: 124 },
-  { month: "Mar", withoutSavings: 138, withSavings: 130 },
-  { month: "Apr", withoutSavings: 149, withSavings: 137 },
-  { month: "May", withoutSavings: 157, withSavings: 142 },
-  { month: "Jun", withoutSavings: 163, withSavings: 146 },
-  { month: "Jul", withoutSavings: 172, withSavings: 151 },
-  { month: "Aug", withoutSavings: 180, withSavings: 155 },
-  { month: "Sep", withoutSavings: 190, withSavings: 160 },
-  { month: "Oct", withoutSavings: 198, withSavings: 162 },
-  { month: "Nov", withoutSavings: 210, withSavings: 168 },
-  { month: "Dec", withoutSavings: 220, withSavings: 172 },
+  { month: "Jan", withoutSavings: 15.2, withSavings: 15.0 },
+  { month: "Feb", withoutSavings: 15.6, withSavings: 15.2 },
+  { month: "Mar", withoutSavings: 16.1, withSavings: 15.4 },
+  { month: "Apr", withoutSavings: 16.5, withSavings: 15.5 },
+  { month: "May", withoutSavings: 16.9, withSavings: 15.6 },
+  { month: "Jun", withoutSavings: 17.3, withSavings: 15.7 },
+  { month: "Jul", withoutSavings: 17.6, withSavings: 15.7 },
+  { month: "Aug", withoutSavings: 18.0, withSavings: 15.8 },
+  { month: "Sep", withoutSavings: 18.4, withSavings: 15.8 },
+  { month: "Oct", withoutSavings: 18.8, withSavings: 15.9 },
+  { month: "Nov", withoutSavings: 19.3, withSavings: 16.0 },
+  { month: "Dec", withoutSavings: 19.9, withSavings: 17.5 },
 ]
 
 const initialTips = [
@@ -141,7 +142,7 @@ export default function InsightsPage() {
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                   Total Subscription Spend
                 </p>
-                <p className="mt-2 text-2xl font-bold text-foreground">$4,285.50</p>
+                <p className="mt-2 text-2xl font-bold text-foreground">$17,535</p>
               </div>
               <Monitor className="h-5 w-5 text-muted-foreground" />
             </CardContent>
@@ -154,9 +155,9 @@ export default function InsightsPage() {
                 </p>
                 <CheckCircle className="h-5 w-5 text-chart-2" />
               </div>
-              <p className="mt-2 text-2xl font-bold text-chart-2">$1,140.50</p>
+              <p className="mt-2 text-2xl font-bold text-chart-2">$2,340</p>
               <p className="text-xs text-muted-foreground">from license optimizations</p>
-              <p className="text-xs text-chart-2 font-medium">~12%</p>
+              <p className="text-xs text-chart-2 font-medium">~13% of spend</p>
             </CardContent>
           </Card>
           <Card className="border-border bg-card">
@@ -167,7 +168,7 @@ export default function InsightsPage() {
                 </p>
                 <TrendingUp className="h-5 w-5 text-muted-foreground" />
               </div>
-              <p className="mt-2 text-2xl font-bold text-foreground">$16,049</p>
+              <p className="mt-2 text-2xl font-bold text-foreground">$210,420</p>
               <p className="text-xs text-muted-foreground">projected annual spend</p>
             </CardContent>
           </Card>
@@ -179,8 +180,8 @@ export default function InsightsPage() {
                 </p>
                 <Lightbulb className="h-5 w-5 text-primary" />
               </div>
-              <p className="mt-2 text-2xl font-bold text-primary">$500.00</p>
-              <p className="text-xs text-muted-foreground">available optimization today</p>
+              <p className="mt-2 text-2xl font-bold text-primary">$1,487</p>
+              <p className="text-xs text-muted-foreground">available optimization /mo</p>
             </CardContent>
           </Card>
         </div>
@@ -226,6 +227,8 @@ export default function InsightsPage() {
                     fontSize={11}
                     tickLine={false}
                     axisLine={false}
+                    tickFormatter={(v) => `$${v}k`}
+                    domain={[14, 21]}
                   />
                   <Tooltip
                     contentStyle={{
@@ -235,6 +238,10 @@ export default function InsightsPage() {
                       color: "var(--card-foreground)",
                       fontSize: 12,
                     }}
+                    formatter={(value: number, name: string) => [
+                      `$${value.toFixed(1)}k`,
+                      name === "withSavings" ? "With Savings" : "Without Savings"
+                    ]}
                   />
                   <Legend
                     verticalAlign="top"
@@ -324,14 +331,14 @@ export default function InsightsPage() {
               <CardContent className="p-5">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-card/70">Quarterly Outlook</p>
                 <p className="mt-2 text-xl font-bold text-card leading-tight">
-                  On track to save<br />$50 more
+                  On track to save<br />$4,461 more this quarter
                 </p>
                 <div className="mt-4">
-                  <Progress value={65} className="h-2 bg-card/20 [&>div]:bg-primary" />
+                  <Progress value={61} className="h-2 bg-card/20 [&>div]:bg-primary" />
                 </div>
                 <div className="mt-2 flex items-center justify-between text-xs text-card/70">
-                  <span>$2,200 achieved</span>
-                  <span>65% of target</span>
+                  <span>$7,020 achieved YTD</span>
+                  <span>61% of Q1 target</span>
                 </div>
               </CardContent>
             </Card>

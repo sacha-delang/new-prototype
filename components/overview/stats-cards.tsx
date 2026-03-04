@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 const stats = [
   {
     label: "TOTAL MONTHLY COST",
-    value: "$4,285.50",
+    value: "$17,535",
     href: "/subscriptions",
     extra: (
       <Badge className="bg-destructive/10 text-destructive text-[10px] font-semibold px-1.5 py-0.5 leading-none">
@@ -17,7 +17,7 @@ const stats = [
   },
   {
     label: "ACTIVE TOOLS",
-    value: "32",
+    value: "24",
     href: "/subscriptions",
     extra: (
       <span className="text-xs text-primary">2 Cancelled from last month</span>
@@ -25,7 +25,7 @@ const stats = [
   },
   {
     label: "POTENTIAL SAVINGS",
-    value: "$3,400",
+    value: "$1,487",
     href: "/insights",
     extra: (
       <Badge className="bg-primary/10 text-primary text-[10px] font-semibold px-1.5 py-0.5 leading-none">
@@ -35,7 +35,7 @@ const stats = [
   },
   {
     label: "UNUSED LICENSES",
-    value: "14",
+    value: "29",
     href: "/insights",
     extra: (
       <span className="text-xs font-medium text-destructive">ACTION NEEDED</span>

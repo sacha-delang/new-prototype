@@ -5,10 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight } from "lucide-react"
 
 const opportunities = [
-  { current: "Calendly", alternative: "Cal.com", savings: "$12/mo" },
-  { current: "Midjourney", alternative: "Stable Diffusion", savings: "$15/mo" },
-  { current: "Zoom Pro", alternative: "Google Meet (included)", savings: "$350/mo" },
-  { current: "New Relic", alternative: "Datadog (existing)", savings: "$310/mo" },
+  { current: "Zoom Business ($350/mo)", alternative: "Google Meet (included)", savings: "$350/mo" },
+  { current: "Jira Premium ($420/mo)", alternative: "Linear (already active)", savings: "$420/mo" },
+  { current: "Asana Business ($200/mo)", alternative: "Notion (already active)", savings: "$200/mo" },
+  { current: "WeTransfer Pro ($450/mo)", alternative: "Google Drive (included)", savings: "$450/mo" },
 ]
 
 export function TopSubscriptions() {
